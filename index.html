@@ -223,7 +223,12 @@
 
 <body>
     <div class="overlay"></div>
-    <audio id="music" src="Love.mp3" preload="auto"></audio>
+   <audio id="music" preload="auto">
+    <source src="./love.mp3" type="audio/mpeg">
+    Your browser does not support audio.
+</audio>
+<div onclick="document.getElementById('music').play()" style="display:none"></div>
+
 
     <div class="card">
         <h1 id="typing"></h1>
@@ -249,19 +254,34 @@
         typeText();
 
         function yesClicked() {
-            document.body.classList.add("bg-active");
-            document.querySelector(".card").classList.add("active");
+     document.body.classList.add("bg-active");
+     document.querySelector(".card").classList.add("active");
 
-            document.getElementById("music").play();
+     const music = document.getElementById("music");
 
-            startParticles();
-            startPetals();
-            startFireworks();
+     // Force reload & play
+     music.load();
+     const playPromise = music.play();
 
-            setTimeout(() => {
-                alert("💖 Forever starts now 💖");
-            }, 800);
-        }
+     if (playPromise !== undefined) {
+         playPromise
+             .then(() => {
+                 console.log("Music started 🎵");
+             })
+             .catch(error => {
+                 alert("⚠️ Tap anywhere once to allow music");
+                 console.error("Audio error:", error);
+             });
+     }
+
+     startParticles();
+     startPetals();
+     startFireworks();
+
+     setTimeout(() => {
+         alert("💖 Forever starts now 💖");
+     }, 800);
+ }
 
         // NO button escape
         document.getElementById("noBtn").addEventListener("mouseover", () => {
